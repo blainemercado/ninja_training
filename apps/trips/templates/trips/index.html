@@ -3,8 +3,46 @@
 <head>
 	<meta charset="utf-8">
 	<title>Home Page</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'trips/css/style.css' %}">
 </head>
 <body>
 	<h1>Hello</h1>
+	<div class="left">
+		<h2>Register</h2>
+		<form action="register" method="post">
+			{% csrf_token %}
+			<input type="text" name="name" placeholder="Name (at least 3 characters)">
+			<input type="text" name="username" placeholder="Username (at least 3 characters)">
+			<input type="text" name="email" placeholder="Email Address">
+			<input type="password" name="pass1" placeholder="Password">
+			*Password should be at least 8 characters
+			<input type="password" name="pass2" placeholder="Password confirmation">
+			<input type="submit" name="register" value="Register">
+		</form>
+		{% if messages %}
+			{% for message in messages %}
+				{% if message.tags == 'info' %}
+					{{message}}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div class="right">
+		<h2>Login</h2>
+		<form action="login" method="post">
+			{% csrf_token %}
+			<input type="text" name="username" placeholder="Username">
+			<input type="password" name="pass1" placeholder="Password">
+			<input type="submit" name="login" value="Login">
+		</form>
+		{% if messages %}
+			{% for message in messages %}
+				{% if message.tags == 'warning' %}
+					{{message}}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</div>
 </body>
 </html>

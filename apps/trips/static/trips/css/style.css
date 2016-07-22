@@ -1,0 +1,12 @@
+* {
+	/*outline: 1px dotted red;*/
+}
+.header {
+	text-align: right;
+}
+.table {
+	margin: 20px;
+}
+tr:nth-child(even) {
+  background-color: lightgrey;
+}

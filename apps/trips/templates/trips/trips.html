@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Travel Dashboard</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'trips/css/style.css' %}">
+</head>
+<body>
+	<div class="header">
+		<a href="{%url 'trips_logout' %}">Logout</a>
+	</div>
+	<h1>Hello, {{request.session.currUseruserName}}!</h1>
+	<h2>Your Trip Schedules</h2>
+	<table class="table">
+		<tr>
+			<th>Destination</th>
+			<th>Travel Start Date</th>
+			<th>Travel End Date</th>
+			<th>Plan</th>
+		</tr>
+		{% for trip in userTrips %}
+		<tr>
+			<td><a href="{%url 'trips_destination' id=trip.id %}">{{trip.destination}}</a></td>
+			<td>{{trip.date_from}}</td>
+			<td>{{trip.date_to}}</td>
+			<td>{{trip.description}}</td>
+		</tr>
+		{% endfor %}
+		{% for trip in tripsJoined %}
+		<tr>
+			<td><a href="{%url 'trips_destination' id=trip.id %}">{{trip.destination}}</a></td>
+			<td>{{trip.date_from}}</td>
+			<td>{{trip.date_to}}</td>
+			<td>{{trip.description}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<h2>Other User's Travel Plans</h2>
+	<table class="table">
+		<tr>
+			<th>Name</th>
+			<th>Destination</th>
+			<th>Travel Start Date</th>
+			<th>Travel End Date</th>
+			<th>Do You Want to Join?</th>
+		</tr>
+		{% for trip in trips %}
+			{% if trip.planned_by.id != request.session.currUserID and trip.joined_by.id != request.session.currUserID %}
+				<tr>
+					<td>{{trip.planned_by.username}}</td>
+					<td><a href="{%url 'trips_destination' id=trip.id %}">{{trip.destination}}</a></td>
+					<td>{{trip.date_from}}</td>
+					<td>{{trip.date_to}}</td>
+					<td>
+						<form action="{%url 'trips_join' id=request.session.currUserID %}" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="join" value="{{trip.id}}">
+							<input type="submit" name="submit" value="Join">
+						</form>
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</table>
+	<a href="{%url 'trips_add' %}">Add a Trip!</a>
+</body>
+</html>

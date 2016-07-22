@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Destination</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'trips/css/style.css' %}">
+</head>
+<body>	
+	<div class="header">
+		<a href="{%url 'trips_trips' %}">Back to Trips</a>
+		<a href="{%url 'trips_logout' %}">Logout</a>
+	</div>
+	{% for trip in trips %}
+		<h1>{{trip.destination}}!</h1>
+		<p>Planned By: {{trip.planned_by.username}}</p>
+		<p>Description: {{trip.description}}</p>
+		<p>Travel Date From: {{trip.date_from}}</p>
+		<p>Travel Date To: {{trip.date_to}}</p>
+		<form action="{%url 'trips_join' id=request.session.currUserID %}" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="join" value="{{trip.id}}">
+			<input type="submit" name="submit" value="Join">
+		</form>
+	{% endfor %}
+	
+	<h2>Other people joining the trip:</h2>
+	{% for trip in trips %}
+		<p>{{trip.joined_by.username}}</p>
+	{% endfor %}
+</body>
+</html>

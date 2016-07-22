@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Add Trip</title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'trips/css/style.css' %}">
+  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+	<script>
+  	$( function() {
+    	$( "#datepicker" ).datepicker();
+    	$( "#dateselector" ).datepicker();
+  	} );
+  	</script>
+</head>
+<body>
+	<div class="header">
+		<a href="{%url 'trips_trips' %}">Back to Trips</a>
+		<a href="{%url 'trips_logout' %}">Logout</a>
+	</div>
+	<h1>Add a Trip</h1>
+	<form action="addTrip/{{request.session.currUserID}}" method="post">
+		{% csrf_token %}
+		<input type="text" name="destination" placeholder="Destination">
+		<textarea rows="4" cols="30" name="description" placeholder="Description"></textarea>
+		Travel Date From:
+		<input type="date" id="datepicker" name="date_from">
+		Travel Date To:
+		<input type="date" id="dateselector" name="date_to">
+		<input type="submit" name="addTrip" value="Add Trip">
+	</form>
+	{% if messages %}
+		{% for message in messages %}
+			{% if message.tags == 'info' %}
+				{{message}}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+</body>
+</html>
