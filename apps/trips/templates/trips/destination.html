@@ -26,7 +26,11 @@
 	
 	<h2>Other people joining the trip:</h2>
 	{% for trip in trips %}
-		<p>{{trip.joined_by.username}}</p>
+		{% if trip.joined_by != null %}
+			{% for joined in trip.joined_by.all %}
+				<p>{{joined.username}}</p>
+			{% endfor %}
+		{% endif %}
 	{% endfor %}
 </body>
 </html>

@@ -19,7 +19,7 @@
 			<th>Travel End Date</th>
 			<th>Plan</th>
 		</tr>
-		{% for trip in userTrips %}
+		{% for trip in usertrips %}
 		<tr>
 			<td><a href="{%url 'trips_destination' id=trip.id %}">{{trip.destination}}</a></td>
 			<td>{{trip.date_from}}</td>
@@ -27,14 +27,7 @@
 			<td>{{trip.description}}</td>
 		</tr>
 		{% endfor %}
-		{% for trip in tripsJoined %}
-		<tr>
-			<td><a href="{%url 'trips_destination' id=trip.id %}">{{trip.destination}}</a></td>
-			<td>{{trip.date_from}}</td>
-			<td>{{trip.date_to}}</td>
-			<td>{{trip.description}}</td>
-		</tr>
-		{% endfor %}
+		
 	</table>
 	<h2>Other User's Travel Plans</h2>
 	<table class="table">
@@ -45,8 +38,8 @@
 			<th>Travel End Date</th>
 			<th>Do You Want to Join?</th>
 		</tr>
-		{% for trip in trips %}
-			{% if trip.planned_by.id != request.session.currUserID and trip.joined_by.id != request.session.currUserID %}
+			{% for trip in othertrips %}
+				 
 				<tr>
 					<td>{{trip.planned_by.username}}</td>
 					<td><a href="{%url 'trips_destination' id=trip.id %}">{{trip.destination}}</a></td>
@@ -60,8 +53,7 @@
 						</form>
 					</td>
 				</tr>
-			{% endif %}
-		{% endfor %}
+			{% endfor %}
 	</table>
 	<a href="{%url 'trips_add' %}">Add a Trip!</a>
 </body>

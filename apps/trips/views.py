@@ -46,18 +46,22 @@ def logout(request):
 	return redirect(reverse('trips_index'))
 
 def trips(request):
+	user = User.objects.get(id=request.session['currUserID'])
 	context = {
-		"trips": Trip.objects.all().order_by("date_from"),
-		"userTrips": Trip.objects.filter(planned_by=request.session['currUserID']),
-		"tripsJoined": Trip.objects.filter(joined_by=request.session['currUserID'])
+		"usertrips": Trip.objects.filter(planned_by=user).order_by("date_from") | Trip.objects.filter(joined_by__id=user.id),
+		"othertrips": Trip.objects.exclude(planned_by=user).exclude(joined_by__id=user.id)
 	}
 	return render(request, 'trips/trips.html', context)
 
 def join(request, id):
-	trip = request.POST['join']
-	join = Trip.tripManager.join(trip, id)
-	if join == True:
-		return redirect(reverse('trips_trips'))
+	print id
+	trip = Trip.objects.get(id=request.POST['join'])
+	j = User.objects.get(id=id)
+	print j
+	print trip, trip.joined_by.all() 
+	print trip.planned_by
+	trip.joined_by.add(j)
+	print trip.joined_by.all()
 	return redirect(reverse('trips_trips'))
 
 def leave(request, id):

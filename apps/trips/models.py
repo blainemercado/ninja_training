@@ -104,12 +104,11 @@ class TripManager(models.Manager):
 		date_from = datetime.strptime(date_from,'%m/%d/%Y')
 		date_to = datetime.strptime(date_to,'%m/%d/%Y')
 		lastTrip = Trip.objects.create(destination=destination, description=description, date_from=date_from, date_to=date_to, planned_by=planned_by)
-		print lastTrip, lastTrip.destination, lastTrip.description, lastTrip.date_from, lastTrip.planned_by
 		return True
 	def join(self, trip, id):
-		joined_by = User.objects.get(id=id)
+		j = User.objects.get(id=id)
 		trip = Trip.objects.get(id=trip)
-		trip.joined_by = joined_by
+		trip.joined_by.add(j)
 		trip.save()
 		return True
 
@@ -131,8 +130,10 @@ class Trip(models.Model):
 	date_from = models.DateField()
 	date_to = models.DateField()
 	planned_by = models.ForeignKey(User)
-	joined_by = models.ForeignKey(User, related_name='User2', default=0, on_delete=models.DO_NOTHING)
+	joined_by = models.ManyToManyField(User, related_name='User2')
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	tripManager = TripManager()
 	objects = models.Manager()
+
+
